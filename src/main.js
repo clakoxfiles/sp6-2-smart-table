@@ -9,8 +9,7 @@ import {processFormData} from "./lib/utils.js";
 import {initTable} from "./components/table.js";
 import { initPagination } from './components/pagination.js';
 import { initSorting } from './components/sorting.js';
-// @todo: подключение
-
+import { initFiltering } from './components/filtering.js'
 
 // Исходные данные используемые в render()
 const {data, ...indexes} = initData(sourceData);
@@ -39,7 +38,7 @@ function render(action) {
     let state = collectState(); // состояние полей из таблицы
     let result = [...data]; // копируем для последующего изменения
     // @todo: использование
-
+    result = applyFiltering(result, state, action)
     result = applySorting(result, state, action)
     result = applyPagination(result, state, action)
 
@@ -49,7 +48,7 @@ function render(action) {
 const sampleTable = initTable({
     tableTemplate: 'table',
     rowTemplate: 'row',
-    before: ['header'],
+    before: ['header', 'filter'],
     after: ['pagination']
 }, render);
 
@@ -73,6 +72,10 @@ const applySorting = initSorting([
     sampleTable.header.elements.sortByDate,
     sampleTable.header.elements.sortByTotal,
 ])
+
+const applyFiltering = initFiltering(sampleTable.filter.elements, {
+    searchBySeller: indexes.sellers,
+})
 
 
 const appRoot = document.querySelector('#app');
