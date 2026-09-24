@@ -20,6 +20,14 @@ export function initFiltering(elements, indexes) {
     })
 
     return (data, state, action) => {
+        // from - to price
+        const total = []
+
+        total.push(state.totalFrom)
+        total.push(state.totalTo)
+
+        state.total = total
+
         // @todo: #4.2 — обработать очистку поля
         if (action !== undefined && action.getAttribute('name') === 'clear') {
             const clearButton = action
